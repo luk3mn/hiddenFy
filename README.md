@@ -125,9 +125,9 @@ _Before starting this application in your local environment, it'll be necessary 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-- ini app
+- init app
    ```sh
-   
+   npx react-native android-run
    ```
 <!-- Documentation -->
 ## Documentation
@@ -136,7 +136,8 @@ _Before starting this application in your local environment, it'll be necessary 
 
 <!-- ROADMAP -->
 ## Roadmap
-- [ ] Initial project configuration
+- [x] Initial project configuration
+- [x] Implementing Dark Mode
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 
@@ -167,7 +168,7 @@ If you have any feedback, please reach out to us at lucasnunes2030@gmail.com
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
+* [Implementing Dark Mode in React Native](https://kodaschool.com/blog/implementing-dark-mode-in-react-native)
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 
