@@ -138,6 +138,9 @@ _Before starting this application in your local environment, it'll be necessary 
 ## Roadmap
 - [x] Initial project configuration
 - [x] Implementing Dark Mode
+- [ ] Implementing translate mode
+- [x] Request Spotify Data
+- [ ] Integrating with Google Gemini
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 
@@ -169,6 +172,7 @@ If you have any feedback, please reach out to us at lucasnunes2030@gmail.com
 ## Acknowledgments
 
 * [Implementing Dark Mode in React Native](https://kodaschool.com/blog/implementing-dark-mode-in-react-native)
+* [Spotify Authentication with React Native](https://readmedium.com/spotify-authentication-with-reactnative-2b6156573d19)
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 
