@@ -22,7 +22,7 @@ const LoginScreen = () => {
   const colors = useThemeColors();
 
   const clientId = 'bd684713d23b4e54adcb7201910473ed';
-  const redirectUri = 'com.hiddenfy://oauthredirect'; // Use something like 'com.yourapp://oauthredirect'
+  const redirectUri = 'com.hiddenfy://oauthredirect';
   const scope = 'user-read-private user-read-email user-read-playback-state user-read-currently-playing user-read-recently-played';
 
   // You already generated codeVerifier and codeChallenge earlier
@@ -86,11 +86,12 @@ const LoginScreen = () => {
         codeChallenge: codeChallenge,
       };
 
-      console.log('CODE VERIFIER: ', codeVerifier)
-      console.log('CODE CHALLENGE: ', codeChallenge)
       const authState = await authorize(authorizationConfig);
-      const expiryTime = new Date().getTime() + authState.accessTokenExpirationDate * 1000;
+      // const expiryTime = new Date(authState.accessTokenExpirationDate).getTime(); // CORRIGIR
+      const expiryTime = new Date(authState.accessTokenExpirationDate).getTime();
       // setToken(authState.accessToken);
+      console.log("EXPIRY TIME: ", expiryTime)
+      console.log("ACCESS TOKEN EXPEIRED TIME: ", authState.accessTokenExpirationDate)
       TokenService.saveToken(authState.accessToken, expiryTime)
       console.log('Spotify Authorization Success:', authState);
       toHome();

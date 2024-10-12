@@ -30,7 +30,7 @@ class TokenService {
       return { token: null, isExpired: true };  // No token or expiry found
     }
 
-    const isExpired = expiry && new Date().getTime() > parseInt(expiry);
+    const isExpired = !(parseInt(expiry) > (new Date().getTime()));
     return { token, isExpired };
   };
   
@@ -42,6 +42,7 @@ class TokenService {
     }
     await AsyncStorage.removeItem(this.TOKEN_KEY);
     await AsyncStorage.removeItem(this.EXPIRY_KEY);
+    console.log(`I'm removing ${this.TOKEN_KEY} and ${this.EXPIRY_KEY}`)
   };
 }
 

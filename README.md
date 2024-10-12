@@ -140,7 +140,9 @@ _Before starting this application in your local environment, it'll be necessary 
 - [x] Implementing Dark Mode
 - [ ] Implementing translate mode
 - [x] Request Spotify Data
+- [ ] Refresh Token
 - [ ] Integrating with Google Gemini
+- [ ] Setting up Evironment Variables to protect sensitive data
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 
