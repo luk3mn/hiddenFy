@@ -1,4 +1,4 @@
-import { Alert, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import ThemeToggle from '../components/ThemeToggle'
 import { useThemeColors } from '../hooks/useThemeColors';
@@ -8,15 +8,18 @@ import TokenService from '../service/TokenService';
 import { useNavigation } from '@react-navigation/native';
 import SpotifyService from '../service/SpotifyService';
 import { itemFormatter, tracksFormatter } from '../service/HandleDataService';
+import CardTrack from '../components/CardTrack';
 
-const HomeScreen = () => {
+const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
   const colors = useThemeColors();
 
   const [accessToken, setAccessToken] = useState(null);
   const [data, setData] = useState(null);
-  const [playingTrack, setPlayingTrack] = useState(null);
+  const [playingTrack, setPlayingTrack] = useState([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [error, setError] = useState(null);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -35,46 +38,36 @@ const HomeScreen = () => {
   }, [accessToken]);
 
   useEffect(() => {
-    if (accessToken) {
-      SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
-        // console.log("CURRENTLY PLAYING TRACK: ", response)
-        if (response !== '204') {
-          // setPlayingTrack(response.item);
-          // itemFormatter(response.item);
-        }
-      })
+    console.log("ROUTE......: ", route.params)
+    // if (!loggedIn) {
+      // setLoggedIn(route.params.loggedIn)
+    // }
+  }, []);
+
+  useEffect(() => {
+    const fetchData = () => {
+      if (accessToken) {
+        SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
+          // console.log("CURRENTLY PLAYING TRACK: ", response)
+          if (response !== '204') {
+            // setPlayingTrack(response.item);
+            const track = itemFormatter(response);
+            setPlayingTrack(track);
+            // console.log(track)
+          }
+        })
+      }
+
+      if (accessToken) {
+        SpotifyService.recentlyPlayed(3, accessToken).then(response => {
+          const tracks = tracksFormatter(response)
+          setRecentlyPlayed(tracks);
+          // console.log(tracks)
+        })
+      }
     }
 
-    
-    if (accessToken) {
-      SpotifyService.recentlyPlayed(2, accessToken).then(response => {
-        // console.log("RESPONSE: ", response)
-        setData(response.items);
-        const track = tracksFormatter(response)
-        // recently_played.push(track)
-
-        
-        let recently_played = [];
-        if (response.items && response.items.length > 0) {
-          response.items.forEach((item) => {
-            let track_dict = {};
-            // console.log("ITEM: ", item.track)
-            
-            track_dict.song = item.track.name;
-            track_dict.album = item.track.album.name;
-            track_dict.preview_url = item.track.preview_url;
-            track_dict.artist = item.track.album.artists[0].name;
-            track_dict.image = item.track.album.images[0].url
-            
-            // const track = itemFormatter(item)
-
-            recently_played.push(track_dict)
-          });
-        }
-
-        console.log(recently_played);
-      })
-    }
+    fetchData();
   }, []);
 
   // useState(() => {
@@ -86,6 +79,18 @@ const HomeScreen = () => {
   //   console.log(!(expiryModel > currentTimeModel))
   // },[])
   
+  const recently = [
+    {
+      album: "Hypnotize",
+      artist: "System Of A Down",
+      image: "https://i.scdn.co/image/ab67616d0000b273f5e7b2e5adaa87430a3eccff",
+      played_at: "2024-10-13:09:46:07",
+      preview_url: "https://p.scdn.co/mp3-preview/578e8890a2f1e3f61007394f18a76114eb121a8c?cid=bd684713d23b4e54adcb7201910473ed",
+      title: "Lonely Day"
+    },
+    // Add more tracks here if needed
+  ];
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.header}>
@@ -95,7 +100,18 @@ const HomeScreen = () => {
         <ThemeToggle size={iconSizes.md} color={colors.iconPrimary} />
       </View>
       <View style={styles.content}>
-        <Text style={{color: colors.textPrimary}}>HOME</Text>
+        {/* <Text style={{color: colors.textPrimary}}>HOME</Text> */}
+        {/* <CardTrack/> */}
+        <FlatList
+          data={recently}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <CardTrack 
+              item={item}
+              index={index}
+            />
+          )}
+        />
       </View>
     </SafeAreaView>
   )

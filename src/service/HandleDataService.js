@@ -1,3 +1,5 @@
+import moment from "moment";
+
 class HandleDataService {
   constructor() {
     this.tracks = [];
@@ -5,41 +7,41 @@ class HandleDataService {
   }
 
   tracksFormatter = (data) => {
-    Object.entries(data).forEach(item => {
-      if (data.items && data.items.length > 0) {
-        data.items.forEach((item) => {
-          let track_obj = {};
-          // console.log("ITEM: ", item.track)
-          
-          track_obj.song = item.track.name;
-          track_obj.album = item.track.album.name;
-          track_obj.preview_url = item.track.preview_url;
-          track_obj.artist = item.track.album.artists[0].name;
-          track_obj.image = item.track.album.images[0].url
-          
-          this.tracks.push(track_obj);
-        });
-      }
+    let objects = {};
+    if (data.items && data.items.length > 0) {
+      Object.entries(data.items).map(item => {
 
-      return this.tracks;
-    })
+        objects.played_at = moment(new Date(item[1].played_at)).format('YYYY-MM-DD:hh:mm:SS');
+        objects.title = item[1].track.name;
+        objects.album = item[1].track.album.name;
+        objects.preview_url = item[1].track.preview_url;
+        objects.artist = item[1].track.album.artists[0].name;
+        objects.image = item[1].track.album.images[0].url
+        
+        this.tracks.push(objects);
+        // this.tracks.map((item) => {
+        //   if (!item.played_at === objects.played_at) {
+        //   }
+        // })
+      })
+      
+      console.log("TRACKS.............>>>.: ", this.tracks)
+    }
+
+    return this.tracks
   }
 
   itemFormatter = (data) => {
-    // Object.entries(data).forEach(item => {
-      // if (data.items && data.items.length > 0) {
-      //   data.items.forEach((item) => {
-          // console.log("ITEM: ", item.track)
-          
-          track.song = data.track.name;
-          this.track_obj.album = data.track.album.name;
-          this.track_obj.preview_url = data.track.preview_url;
-          this.track_obj.artist = data.track.album.artists[0].name;
-          this.track_obj.image = data.track.album.images[0].url
-          // this.track_obj = {};
-        // });
-      // }
-    // })
+    
+    if (data.item) {
+      this.track_obj.title = data.item.name;
+      this.track_obj.album = data.item.album.name;
+      this.track_obj.preview_url = data.item.preview_url;
+      this.track_obj.artist = data.item.album.artists[0].name;
+      this.track_obj.image = data.item.album.images[0].url
+
+      console.log("DATA............: ", data.item.preview_url)
+    }
 
     return this.track_obj;
   }

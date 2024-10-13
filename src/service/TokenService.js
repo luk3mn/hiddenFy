@@ -42,7 +42,6 @@ class TokenService {
     }
     await AsyncStorage.removeItem(this.TOKEN_KEY);
     await AsyncStorage.removeItem(this.EXPIRY_KEY);
-    console.log(`I'm removing ${this.TOKEN_KEY} and ${this.EXPIRY_KEY}`)
   };
 }
 

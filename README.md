@@ -80,6 +80,14 @@ This application include topics such as:
 <li><b>Spotify API:</b> Retrieves the user's song data directly from Spotify</li>  
 <li><b>Google Gemini:</b> Leverages AI capabilities to analyze Spotify songs and generate insightful results.</li>  
 
+<br/>
+<p align="justify">
+Insights:
+</p>
+
+<li>Meaning Behind the Song</li>
+<li>Track Personality</li>
+<li>Feelings Insights</li>
 
 <p align="right">(<a href="#hiddenfy">back to top</a>)</p>
 

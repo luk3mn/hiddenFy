@@ -89,10 +89,10 @@ const LoginScreen = () => {
       const authState = await authorize(authorizationConfig);
       // const expiryTime = new Date(authState.accessTokenExpirationDate).getTime(); // CORRIGIR
       const expiryTime = new Date(authState.accessTokenExpirationDate).getTime();
-      // setToken(authState.accessToken);
       console.log("EXPIRY TIME: ", expiryTime)
       console.log("ACCESS TOKEN EXPEIRED TIME: ", authState.accessTokenExpirationDate)
       TokenService.saveToken(authState.accessToken, expiryTime)
+      setToken(authState.accessToken);
       console.log('Spotify Authorization Success:', authState);
       toHome();
     } catch (error) {
@@ -102,7 +102,10 @@ const LoginScreen = () => {
 
   const toHome = () => {
     console.log("going to home............");
-    navigation.navigate('Home')
+    navigation.navigate('Home', {
+      token: token,
+      loggedIn: true
+    })
   }
 
 
