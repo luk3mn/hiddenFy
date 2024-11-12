@@ -110,9 +110,9 @@ const LoginScreen = () => {
 
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={authorizeSpotify} style={[styles.toggle, {backgroundColor: colors.iconSecondary}]}>
-        <Text style={styles.txtToggle}>Login with Sposity</Text>
+    <SafeAreaView style={[styles.container, {backgroundColor: colors.background}]}>
+      <TouchableOpacity onPress={authorizeSpotify} style={[styles.toggle, {backgroundColor: colors.togglePrimary}]}>
+        <Text style={[styles.txtToggle, {color: colors.textPrimary}]}>Login with Sposity</Text>
       </TouchableOpacity>
     </SafeAreaView>
   )
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   },
   txtToggle: {
     fontSize: fontSize.md,
-    fontFamily: fontFamilies.bold
+    fontFamily: fontFamilies.bold,
+    fontWeight: 'bold',
   }
 })

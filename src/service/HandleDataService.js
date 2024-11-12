@@ -6,19 +6,47 @@ class HandleDataService {
     this.track_obj = {};
   }
 
-  tracksFormatter = (data) => {
-    let objects = {};
-    if (data.items && data.items.length > 0) {
-      Object.entries(data.items).map(item => {
+  // tracksFormatter = (data) => {
+  //   let objects = {};
+  //   if (data.items && data.items.length > 0) {
+  //     Object.entries(data.items).map(item => {
 
-        objects.played_at = moment(new Date(item[1].played_at)).format('YYYY-MM-DD:hh:mm:SS');
-        objects.title = item[1].track.name;
-        objects.album = item[1].track.album.name;
-        objects.preview_url = item[1].track.preview_url;
-        objects.artist = item[1].track.album.artists[0].name;
-        objects.image = item[1].track.album.images[0].url
+  //       objects.played_at = moment(new Date(item[1].played_at)).format('YYYY-MM-DD:hh:mm:SS');
+  //       objects.title = item[1].track.name;
+  //       objects.album = item[1].track.album.name;
+  //       objects.preview_url = item[1].track.preview_url;
+  //       objects.artist = item[1].track.album.artists[0].name;
+  //       objects.image = item[1].track.album.images[0].url
         
-        this.tracks.push(objects);
+  //       this.tracks.push(objects);
+  //       // this.tracks.map((item) => {
+  //       //   if (!item.played_at === objects.played_at) {
+  //       //   }
+  //       // })
+  //     })
+      
+  //     console.log("TRACKS.............>>>.: ", this.tracks)
+  //   }
+
+  //   return this.tracks
+  // }
+
+  tracksFormatter = (data) => {
+    this.tracks = [];
+
+    if (data.items && data.items.length > 0) {
+      Object.entries(data.items).forEach(item => {
+
+        let trackObject = {};
+
+        trackObject.played_at = moment(new Date(item[1].played_at)).format('YYYY-MM-DD HH:mm:ss:SSS');
+        trackObject.title = item[1].track.name;
+        trackObject.album = item[1].track.album.name;
+        trackObject.preview_url = item[1].track.preview_url;
+        trackObject.artist = item[1].track.album.artists[0].name;
+        trackObject.image = item[1].track.album.images[0].url
+        
+        this.tracks.push(trackObject);
         // this.tracks.map((item) => {
         //   if (!item.played_at === objects.played_at) {
         //   }

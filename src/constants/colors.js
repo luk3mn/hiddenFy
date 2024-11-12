@@ -1,7 +1,7 @@
 export const lightColors = {
     background: "#FFFFFF",
-    textPrimary: '#F0F0F0',
-    textSecondary: '#A5C0FF',
+    textPrimary: '#091227',
+    textSecondary: '#F0F0F0',
     cardPrimary: '#091227',
     togglePrimary: '#17D662',
     iconPrimary: '#091227',

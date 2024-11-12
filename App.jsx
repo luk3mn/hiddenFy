@@ -1,7 +1,7 @@
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
-import StackNavigation from "./src/navigation/StackNavigation";
+import StackNavigation from "./src/navigation/MainNavigation";
 import { ThemeProvider } from "./src/contexts/ThemeContext";
 
 

@@ -5,10 +5,11 @@ import { useThemeColors } from '../hooks/useThemeColors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { iconSizes, spacing } from '../constants/dimensions';
 import TokenService from '../service/TokenService';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import SpotifyService from '../service/SpotifyService';
 import { itemFormatter, tracksFormatter } from '../service/HandleDataService';
 import CardTrack from '../components/CardTrack';
+import CurrentlyPlayingTrack from '../components/CurrentlyPlayingTrack';
 
 const HomeScreen = ({ route }) => {
   const navigation = useNavigation();
@@ -22,9 +23,8 @@ const HomeScreen = ({ route }) => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-    const fetchToken = async () => {
+    ;(async () => {
       const { token, isExpired } = await TokenService.getToken();
-      // console.log("TOKEN: ", token);
       console.log("isExpired: ", isExpired);
       if (isExpired) {
         TokenService.clearToken();
@@ -32,64 +32,73 @@ const HomeScreen = ({ route }) => {
       } else {
         setAccessToken(token);
       }
-    }
-
-    fetchToken();
-  }, [accessToken]);
+    })();
+  }, [accessToken])
 
   useEffect(() => {
-    console.log("ROUTE......: ", route.params)
+    console.log("ROUTE.........: ", route.params)
     // if (!loggedIn) {
       // setLoggedIn(route.params.loggedIn)
     // }
   }, []);
 
   useEffect(() => {
-    const fetchData = () => {
-      if (accessToken) {
-        SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
-          // console.log("CURRENTLY PLAYING TRACK: ", response)
-          if (response !== '204') {
-            // setPlayingTrack(response.item);
-            const track = itemFormatter(response);
-            setPlayingTrack(track);
-            // console.log(track)
-          }
-        })
-      }
+    ;(async () => {
+      // if (accessToken) {
+      //   SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
+      //     // console.log("CURRENTLY PLAYING TRACK: ", response)
+      //     if (response !== '204') {
+      //       // setPlayingTrack(response.item);
+      //       const track = itemFormatter(response);
+      //       setPlayingTrack(track);
+      //       // console.log(track)
+      //     }
+      //   })
+      // }
 
+      // console.log("ACCESS..........")
       if (accessToken) {
-        SpotifyService.recentlyPlayed(3, accessToken).then(response => {
+        SpotifyService.recentlyPlayed(5, accessToken).then(response => {
           const tracks = tracksFormatter(response)
           setRecentlyPlayed(tracks);
-          // console.log(tracks)
         })
       }
-    }
-
-    fetchData();
+    })();
   }, []);
 
-  // useState(() => {
-  //   const expiryModel = new Date('2024-10-12T21:16:04Z').getTime();
-  //   // const currentTimeModel = new Date('2024-10-12T16:23:04Z').getTime();
-  //   const currentTimeModel = new Date().getTime();
-  //   console.log('ExpiryModel....: ', expiryModel)
-  //   console.log('Current Time...: ', currentTimeModel)
-  //   console.log(!(expiryModel > currentTimeModel))
-  // },[])
+
+  useFocusEffect(() => {
+    // console.log(".................")
+    // SpotifyService.recentlyPlayed(7, accessToken).then(response => {
+    //   const tracks = tracksFormatter(response)
+    //   setRecentlyPlayed(tracks);
+    // })
+
+    if (accessToken) {
+      SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
+        // console.log("CURRENTLY PLAYING TRACK: ", response)
+        if (response !== '204') {
+          // setPlayingTrack(response.item);
+          const track = itemFormatter(response);
+          setPlayingTrack(track);
+          // console.log(track)
+        }
+      })
+    }
+  });
   
-  const recently = [
-    {
-      album: "Hypnotize",
-      artist: "System Of A Down",
-      image: "https://i.scdn.co/image/ab67616d0000b273f5e7b2e5adaa87430a3eccff",
-      played_at: "2024-10-13:09:46:07",
-      preview_url: "https://p.scdn.co/mp3-preview/578e8890a2f1e3f61007394f18a76114eb121a8c?cid=bd684713d23b4e54adcb7201910473ed",
-      title: "Lonely Day"
-    },
-    // Add more tracks here if needed
-  ];
+
+  // const recently = [
+  //   {
+  //     album: "Hypnotize",
+  //     artist: "System Of A Down",
+  //     image: "https://i.scdn.co/image/ab67616d0000b273f5e7b2e5adaa87430a3eccff",
+  //     played_at: "2024-10-13:09:46:07",
+  //     preview_url: "https://p.scdn.co/mp3-preview/578e8890a2f1e3f61007394f18a76114eb121a8c?cid=bd684713d23b4e54adcb7201910473ed",
+  //     title: "Lonely Day"
+  //   },
+  //   // Add more tracks here if needed
+  // ];
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -103,7 +112,7 @@ const HomeScreen = ({ route }) => {
         {/* <Text style={{color: colors.textPrimary}}>HOME</Text> */}
         {/* <CardTrack/> */}
         <FlatList
-          data={recently}
+          data={recentlyPlayed}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <CardTrack 
@@ -112,6 +121,9 @@ const HomeScreen = ({ route }) => {
             />
           )}
         />
+      </View>
+      <View style={{flex: 0}}>
+        <CurrentlyPlayingTrack item={playingTrack} />
       </View>
     </SafeAreaView>
   )
