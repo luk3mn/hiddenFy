@@ -10,7 +10,7 @@ const CardTrack = ({ item, index }) => {
   const colors = useThemeColors();
   
   // const track = item.item;
-  console.log("CARD............: ", item)
+  // console.log("CARD............: ", item)
 
   return (
     <View style={[styles.cardContainer, {backgroundColor: colors.cardPrimary}]}>

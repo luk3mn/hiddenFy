@@ -53,7 +53,7 @@ class HandleDataService {
         // })
       })
       
-      console.log("TRACKS.............>>>.: ", this.tracks)
+      // console.log("TRACKS.............>>>.: ", this.tracks)
     }
 
     return this.tracks
@@ -66,9 +66,10 @@ class HandleDataService {
       this.track_obj.album = data.item.album.name;
       this.track_obj.preview_url = data.item.preview_url;
       this.track_obj.artist = data.item.album.artists[0].name;
-      this.track_obj.image = data.item.album.images[0].url
+      this.track_obj.image = data.item.album.images[0].url;
+      this.track_obj.duration = data.item.duration_ms;
 
-      console.log("DATA............: ", data.item.preview_url)
+      // console.log("DATA............: ", data.item.duration_ms)
     }
 
     return this.track_obj;

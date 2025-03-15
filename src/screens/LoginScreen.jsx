@@ -102,10 +102,11 @@ const LoginScreen = () => {
 
   const toHome = () => {
     console.log("going to home............");
-    navigation.navigate('Home', {
-      token: token,
-      loggedIn: true
-    })
+    // navigation.navigate('Home', {
+    //   token: token,
+    //   loggedIn: true
+    // })
+    navigation.navigate('Home');
   }
 
 

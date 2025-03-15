@@ -1,5 +1,5 @@
 import { Alert, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import ThemeToggle from '../components/ThemeToggle'
 import { useThemeColors } from '../hooks/useThemeColors';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -16,7 +16,7 @@ const HomeScreen = ({ route }) => {
   const colors = useThemeColors();
 
   const [accessToken, setAccessToken] = useState(null);
-  const [data, setData] = useState(null);
+  const [duration, setDuration] = useState(1000);
   const [playingTrack, setPlayingTrack] = useState([]);
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
   const [error, setError] = useState(null);
@@ -25,7 +25,7 @@ const HomeScreen = ({ route }) => {
   useEffect(() => {
     ;(async () => {
       const { token, isExpired } = await TokenService.getToken();
-      console.log("isExpired: ", isExpired);
+      console.log("isExpired >>>>>>>>>>>>>: ", isExpired);
       if (isExpired) {
         TokenService.clearToken();
         navigation.navigate('Login');
@@ -33,72 +33,58 @@ const HomeScreen = ({ route }) => {
         setAccessToken(token);
       }
     })();
-  }, [accessToken])
+  }, []);
 
   useEffect(() => {
-    console.log("ROUTE.........: ", route.params)
+    console.log("ROUTE.........: ", route)
     // if (!loggedIn) {
       // setLoggedIn(route.params.loggedIn)
     // }
   }, []);
 
   useEffect(() => {
-    ;(async () => {
-      // if (accessToken) {
-      //   SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
-      //     // console.log("CURRENTLY PLAYING TRACK: ", response)
-      //     if (response !== '204') {
-      //       // setPlayingTrack(response.item);
-      //       const track = itemFormatter(response);
-      //       setPlayingTrack(track);
-      //       // console.log(track)
-      //     }
-      //   })
-      // }
-
-      // console.log("ACCESS..........")
+    (async () => {
       if (accessToken) {
-        SpotifyService.recentlyPlayed(5, accessToken).then(response => {
+        await SpotifyService.recentlyPlayed(10, accessToken).then(response => {
           const tracks = tracksFormatter(response)
           setRecentlyPlayed(tracks);
         })
       }
+      console.log("NEW DURATION: ", duration)
     })();
-  }, []);
+  }, [accessToken, duration]);
 
-
-  useFocusEffect(() => {
-    // console.log(".................")
-    // SpotifyService.recentlyPlayed(7, accessToken).then(response => {
-    //   const tracks = tracksFormatter(response)
-    //   setRecentlyPlayed(tracks);
-    // })
-
+  useEffect(() => {
+    // ;(async () => {
+    // })();
     if (accessToken) {
-      SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
-        // console.log("CURRENTLY PLAYING TRACK: ", response)
-        if (response !== '204') {
-          // setPlayingTrack(response.item);
-          const track = itemFormatter(response);
-          setPlayingTrack(track);
-          // console.log(track)
-        }
-      })
+      setInterval(async() => {
+        await SpotifyService.currentlyPlayingTrack(accessToken).then(response => {
+          if (response !== '204') {
+            const track = itemFormatter(response);
+            console.log("CURRENTLY PLAYING TRACK: ", track)
+            setPlayingTrack(track);
+            setDuration(track.duration);
+          }
+        })
+      }, duration);
     }
-  });
-  
+  }, [accessToken, duration]);
 
-  // const recently = [
-  //   {
-  //     album: "Hypnotize",
-  //     artist: "System Of A Down",
-  //     image: "https://i.scdn.co/image/ab67616d0000b273f5e7b2e5adaa87430a3eccff",
-  //     played_at: "2024-10-13:09:46:07",
-  //     preview_url: "https://p.scdn.co/mp3-preview/578e8890a2f1e3f61007394f18a76114eb121a8c?cid=bd684713d23b4e54adcb7201910473ed",
-  //     title: "Lonely Day"
-  //   },
-  //   // Add more tracks here if needed
-  // ];
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     return () => {
+  //       console.log("CALLING SCREEN.........................")
+  //     }
+  //   }, [])
+  // );
+
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     // setDuration(1);
+  //     console.log("DURATION CALLING: ", duration)
+  //   }, duration);
+  // }, []);
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>

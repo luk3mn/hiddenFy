@@ -1,4 +1,4 @@
-import { Alert, Animated, Easing, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, Animated, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { useThemeColors } from '../hooks/useThemeColors'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -6,10 +6,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { fontSize, iconSizes, imageSizes, spacing } from '../constants/dimensions';
 
 const CurrentlyPlayingTrack = ({ item }) => {
+  // console.log("ITEM: ", item.length > 0 ? true : false)
   const colors = useThemeColors();
   const scrollAnim = useRef(new Animated.Value(0)).current;
   const [containerWidth, setContainerWidth] = useState(0);
   const [textWidth, setTextWidth] = useState(0);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     if (containerWidth && textWidth) {
@@ -17,6 +19,14 @@ const CurrentlyPlayingTrack = ({ item }) => {
       startScrolling();
     }
   }, [containerWidth, textWidth]);
+
+  useEffect(() => {
+    if (item) {
+      setImage(item.image);
+    } else {
+      setImage(null);
+    }
+  }, [item]);
 
   const startScrolling = () => {
     const distance = textWidth > containerWidth ? textWidth : containerWidth;
@@ -43,7 +53,11 @@ const CurrentlyPlayingTrack = ({ item }) => {
   return (
     <View style={[styles.cardContainer, {backgroundColor: colors.cardPrimary}]}>
       <View style={[styles.cardDetail, {flex: 1}]}>
-        <Image source={{uri: item.image }} style={styles.cardImage}/>
+        {image ? (
+          <Image source={{uri: item.image }} style={styles.cardImage}/>
+        ) : (
+          <Image source={require('../../assets/image/placeholder.jpg')} style={styles.cardImage}/>
+        )}
         <View style={{flex: 1, overflow: 'hidden', paddingHorizontal: spacing.md}}
           onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}
         >
@@ -90,7 +104,8 @@ const styles = StyleSheet.create({
   cardImage: {
     width: imageSizes.md,
     height: imageSizes.md,
-    borderRadius: spacing.sm
+    borderRadius: spacing.sm,
+    marginHorizontal: spacing.sm
   },
   cardDetail: {
     flexDirection: 'row',
